@@ -1,25 +1,9 @@
 import { useState, useEffect } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { useQuery } from "@tanstack/react-query";
-import Loader from "../../Components/Loader";
-import useAxiosPublic from "../../../Hooks/useAxiosPublic";
+import PropTypes from "prop-types";
 
-const Banners = () => {
+const Banners = ({ BannerData }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const axiosPublic = useAxiosPublic();
-
-  // Fetching Banner
-  const {
-    data: BannerData,
-    isLoading: BannerIsLoading,
-    error: BannerError,
-  } = useQuery({
-    queryKey: ["Banner"],
-    queryFn: async () => {
-      const res = await axiosPublic.get(`/Banner`);
-      return res.data;
-    },
-  });
 
   // Automatically change the banner every 5 seconds
   useEffect(() => {
@@ -28,7 +12,7 @@ const Banners = () => {
     }, 5000); // Change every 5000ms (5 seconds)
 
     return () => clearInterval(interval); // Clear interval when unmounted
-  }, [currentIndex, BannerData]); // Add BannerData as a dependency
+  }, [currentIndex]); // Removed BannerData as it's likely static
 
   // Function to go to the previous slide
   const handlePrev = () => {
@@ -44,19 +28,9 @@ const Banners = () => {
     );
   };
 
-  // Loading state
-  if (BannerIsLoading) {
-    return <Loader />;
-  }
-
-  // Error state
-  if (BannerError) {
-    return <p>Error loading data: {BannerError.message}</p>;
-  }
-
   return (
-    <div className="bg-blue-300 py-40">
-      <div className="relative w-[1200px] mx-auto h-[700px]">
+    <div className="bg-blue-300 py-20">
+      <div className="relative mx-auto h-[600px] md:h-[900px]">
         {/* Dynamic Image */}
         <img
           key={BannerData[currentIndex].image} // Prevent image flicker
@@ -67,34 +41,46 @@ const Banners = () => {
 
         {/* Caption Overlay */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <p className="text-5xl font-bold text-white shadow-2xl">
+          <p className="text-4xl md:text-5xl text-center font-bold text-white shadow-2xl">
             {BannerData[currentIndex].caption}
           </p>
         </div>
 
         {/* Navigation Controls */}
-        <div className="absolute bg-white w-full px-10 h-20 bottom-0 flex justify-between items-center">
-          <button
-            onClick={handlePrev}
-            className="p-4 px-10 bg-blue-500 text-white font-bold rounded-3xl hover:bg-blue-600 flex items-center"
-            aria-label="Previous banner"
-          >
-            <FaArrowLeft className="mr-3" />
-            <span>LEFT</span>
-          </button>
+        <div className="absolute bg-black w-full md:px-10 h-20 bottom-0 opacity-50">
+          <div className="flex justify-between items-center pt-5 max-w-[1200px] mx-auto">
+            <button
+              onClick={handlePrev}
+              className="p-4 px-10 bg-blue-500 text-white font-bold rounded-3xl hover:bg-blue-600 flex items-center"
+              aria-label="Previous banner"
+            >
+              <FaArrowLeft className="mr-3" />
+              <span>LEFT</span>
+            </button>
 
-          <button
-            onClick={handleNext}
-            className="p-4 px-10 bg-blue-500 text-white font-bold rounded-3xl hover:bg-blue-600 flex items-center"
-            aria-label="Next banner"
-          >
-            <span className="mr-3">RIGHT</span>
-            <FaArrowRight />
-          </button>
+            <button
+              onClick={handleNext}
+              className="p-4 px-10 bg-blue-500 text-white font-bold rounded-3xl hover:bg-blue-600 flex items-center"
+              aria-label="Next banner"
+            >
+              <span className="mr-3">RIGHT</span>
+              <FaArrowRight />
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
+};
+
+// Add propTypes validation
+Banners.propTypes = {
+  BannerData: PropTypes.arrayOf(
+    PropTypes.shape({
+      image: PropTypes.string.isRequired,
+      caption: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
 
 export default Banners;

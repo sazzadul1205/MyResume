@@ -42,9 +42,9 @@ const MySkills = () => {
   }, []);
 
   return (
-    <div className="bg-gradient-to-b from-white to-blue-400 py-40">
+    <div className="bg-gradient-to-b from-white to-blue-400 lg:py-40">
       <div
-        className="w-[1200px] mx-auto bg-gradient-to-br from-white to-blue-400 py-20 px-20 rounded-2xl"
+        className="lg:w-[1200px] mx-auto bg-gradient-to-br from-white to-blue-400 py-20 lg:px-20 rounded-2xl"
         data-aos="fade-right"
         data-aos-delay="200"
         data-aos-once="false"
@@ -63,7 +63,7 @@ const MySkills = () => {
             <div className="flex mb-5 items-center">
               <FaHtml5 className="text-4xl mr-5 text-orange-500" />
               <progress
-                className="progress progress-info w-96 h-5 border border-blue-400"
+                className="progress progress-info w-56 lg:w-96 h-5 border border-blue-400"
                 value={htmlProgress}
                 max="100"
               ></progress>
@@ -71,7 +71,7 @@ const MySkills = () => {
             <div className="flex mb-5 items-center">
               <FaCss3 className="text-4xl mr-5 text-blue-500" />
               <progress
-                className="progress progress-info w-96 h-5 border border-blue-400"
+                className="progress progress-info w-56 lg:w-96 h-5 border border-blue-400"
                 value={cssProgress}
                 max="100"
               ></progress>
@@ -79,7 +79,7 @@ const MySkills = () => {
             <div className="flex mb-5 items-center">
               <IoLogoJavascript className="text-4xl mr-5 text-yellow-500" />
               <progress
-                className="progress progress-info w-96 h-5 border border-blue-400"
+                className="progress progress-info w-56 lg:w-96 h-5 border border-blue-400"
                 value={jsProgress}
                 max="100"
               ></progress>
@@ -87,7 +87,7 @@ const MySkills = () => {
             <div className="flex mb-5 items-center">
               <FaReact className="text-4xl mr-5 text-blue-400" />
               <progress
-                className="progress progress-info w-96 h-5 border border-blue-400"
+                className="progress progress-info w-56 lg:w-96 h-5 border border-blue-400"
                 value={reactProgress}
                 max="100"
               ></progress>
@@ -99,7 +99,7 @@ const MySkills = () => {
             <div className="flex mb-5 items-center">
               <IoLogoFirebase className="text-4xl mr-5 text-yellow-400" />
               <progress
-                className="progress progress-info w-96 h-5 border border-blue-400"
+                className="progress progress-info w-56 lg:w-96 h-5 border border-blue-400"
                 value={firebaseProgress}
                 max="100"
               ></progress>
@@ -107,7 +107,7 @@ const MySkills = () => {
             <div className="flex mb-5 items-center">
               <FaNodeJs className="text-4xl mr-5 text-yellow-500" />
               <progress
-                className="progress progress-info w-96 h-5 border border-blue-400"
+                className="progress progress-info w-56 lg:w-96 h-5 border border-blue-400"
                 value={nodeProgress}
                 max="100"
               ></progress>
@@ -115,7 +115,7 @@ const MySkills = () => {
             <div className="flex mb-5 items-center">
               <SiExpress className="text-4xl mr-5 text-blue-500" />
               <progress
-                className="progress progress-info w-96 h-5 border border-blue-400"
+                className="progress progress-info w-56 lg:w-96 h-5 border border-blue-400"
                 value={expressProgress}
                 max="100"
               ></progress>
@@ -123,7 +123,7 @@ const MySkills = () => {
             <div className="flex mb-5 items-center">
               <SiMongodb className="text-4xl mr-5 text-green-500" />
               <progress
-                className="progress progress-info w-96 h-5 border border-blue-400"
+                className="progress progress-info w-56 lg:w-96 h-5 border border-blue-400"
                 value={mongoProgress}
                 max="100"
               ></progress>

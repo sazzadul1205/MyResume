@@ -1,13 +1,9 @@
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { useEffect } from "react";
-import Loader from "../../Components/Loader";
-import useAxiosPublic from "../../../Hooks/useAxiosPublic";
-import { useQuery } from "@tanstack/react-query";
+import PropTypes from "prop-types";
 
-const MySelf = () => {
-  const axiosPublic = useAxiosPublic();
-
+const MySelf = ({ MySelfData }) => {
   // Initialize AOS
   useEffect(() => {
     AOS.init({
@@ -16,41 +12,18 @@ const MySelf = () => {
     });
   }, []);
 
-  // Fetching User Data
-  const {
-    data: MySelfData, // Adjusted to match array data structure
-    isLoading: MySelfIsLoading,
-    error: MySelfError,
-  } = useQuery({
-    queryKey: ["MySelf"],
-    queryFn: async () => {
-      const res = await axiosPublic.get(`/MySelf`);
-      return res.data;
-    },
-  });
-
-  // Loading state
-  if (MySelfIsLoading) {
-    return <Loader />;
-  }
-
-  // Error state
-  if (MySelfError) {
-    return <p>Error loading data: {MySelfError.message}</p>;
-  }
-
   // Extract the data since it's an array (assuming only one entry in the array)
   const MySelf = MySelfData[0];
 
   return (
-    <div className="bg-gradient-to-b from-white to-blue-400 py-40">
+    <div className="bg-gradient-to-b from-white to-blue-400 lg:py-40">
       <div
-        className="mx-auto w-[1200px] text-black"
+        className="mx-auto lg:w-[1200px]  "
         data-aos="fade-left"
         data-aos-delay="300"
         data-aos-once="false"
       >
-        <div className="px-10 py-14 bg-blue-400 rounded-2xl shadow-2xl flex gap-10 items-center">
+        <div className="px-1 md:px-10 py-14 bg-gradient-to-br from-blue-400 to-blue-300 rounded-2xl shadow-2xl flex flex-col lg:flex-row gap-10 items-center ">
           {/* Rendering the image from the local JSON data */}
           <img
             src={MySelf.imageUrl}
@@ -59,9 +32,9 @@ const MySelf = () => {
           />
           <div>
             <div className="text-white">
-              <h1 className="text-4xl font-bold">About Me</h1>
+              <h1 className="text-4xl font-bold text-center md:text-left">About Me</h1>
               {/* Rendering dynamic data from the JSON object */}
-              <p className="text-lg leading-relaxed">
+              <p className="text-lg leading-relaxed text-center md:text-left">
                 My name is {MySelf.name}, and I am currently pursuing{" "}
                 {MySelf.education}.
                 <br />
@@ -74,6 +47,18 @@ const MySelf = () => {
       </div>
     </div>
   );
+};
+
+// PropTypes validation
+MySelf.propTypes = {
+  MySelfData: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      imageUrl: PropTypes.string.isRequired,
+      education: PropTypes.string.isRequired,
+      bio: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
 
 export default MySelf;

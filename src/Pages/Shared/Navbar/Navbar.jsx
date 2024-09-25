@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react";
+import { IoMenu } from "react-icons/io5";
+import { FaChevronRight } from "react-icons/fa";
+import Swal from "sweetalert2"; // Import SweetAlert2
 
 const Navbar = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -20,6 +23,28 @@ const Navbar = () => {
       element.scrollIntoView({ behavior: "smooth" });
       setActiveSection(id); // Set the active section when clicked
     }
+  };
+
+  const downloadResume = () => {
+    Swal.fire({
+      title: "Download Resume?",
+      text: "Are you sure you want to download Sazzadul Islam Molla's Resume?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, download it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const pdfUrl = "../../assets/Sazzadul_Islam_Molla_Resume.pdf";
+        const link = document.createElement("a");
+        link.href = pdfUrl;
+        link.download = "Sazzadul Islam Molla's Resume.pdf";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    });
   };
 
   const renderNav = () => (
@@ -96,26 +121,24 @@ const Navbar = () => {
           Contact
         </button>
       </li>
+      <li>
+        <button
+          className="flex lg:hidden hover:text-blue-500"
+          onClick={downloadResume}
+        >
+          Download Resume
+        </button>
+      </li>
     </>
   );
 
-  const downloadResume = () => {
-    const pdfUrl = "../../assets/Sazzadul_Islam_Molla_Resume.pdf"; 
-    const link = document.createElement("a");
-    link.href = pdfUrl;
-    link.download = "Sazzadul Islam Molla's Resume.pdf";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
   return (
     <div
-      className={`navbar fixed top-0 left-0 w-full z-50 lg:px-[350px] mx-auto text-black transition-colors duration-300 ${
+      className={`navbar fixed top-0 left-0 w-80 md:w-full z-50 lg:px-[350px] mx-auto transition-colors duration-300 ${
         scrollPosition > 50 ? "bg-white shadow-lg" : "bg-blue-200"
       }`}
     >
-      <div className="navbar max-w-[1200px] mx-auto flex justify-between items-center">
+      <div className="navbar mx-auto flex justify-between items-center">
         {/* Navbar Start */}
         <div className="navbar-start flex items-center">
           <div className="dropdown lg:hidden">
@@ -124,20 +147,7 @@ const Navbar = () => {
               className="btn btn-ghost"
               onClick={toggleMenu}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                fill="none"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h8m-8 6h16"
-                />
-              </svg>
+              <IoMenu className="text-3xl mt-2" />
             </button>
             {isMenuOpen && (
               <ul
@@ -149,8 +159,8 @@ const Navbar = () => {
             )}
           </div>
           <div className="text-3xl font-bold italic">
-            <p
-              className="text-center text-4xl font-bold py-4"
+            <button
+              className="text-center text-4xl font-bold buttony-4"
               style={{
                 background:
                   "linear-gradient(to right, #3512CF 0%, #CF0775 100%)",
@@ -159,7 +169,7 @@ const Navbar = () => {
               }}
             >
               Sazzadul
-            </p>
+            </button>
           </div>
         </div>
 
@@ -171,12 +181,12 @@ const Navbar = () => {
         </div>
 
         {/* Navbar End */}
-        <div className="navbar-end">
+        <div className="navbar-end hidden lg:flex">
           <button
-            className=" text-white px-10 py-4 rounded-full bg-blue-500 hover:bg-blue-300 hover:text-black font-semibold "
+            className=" text-white px-10 py-4 rounded-full bg-blue-500 hover:bg-blue-300 hover:text-black font-semibold flex items-center"
             onClick={downloadResume}
           >
-            Get Resume {">"}
+            Get Resume <FaChevronRight className="ml-4" />
           </button>
         </div>
       </div>

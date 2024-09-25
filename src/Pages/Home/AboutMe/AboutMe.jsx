@@ -3,46 +3,18 @@ import { FaFacebook, FaGithub, FaTwitter, FaLinkedin } from "react-icons/fa";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { useEffect } from "react";
-import Loader from "../../Components/Loader";
-import useAxiosPublic from "../../../Hooks/useAxiosPublic";
-import { useQuery } from "@tanstack/react-query";
+import PropTypes from "prop-types";
 
-const AboutMe = () => {
-  const axiosPublic = useAxiosPublic();
-
-  // Fetching User Data
-  const {
-    data: UserData,
-    isLoading: UserDataIsLoading,
-    error: UserDataError,
-  } = useQuery({
-    queryKey: ["UserData"],
-    queryFn: async () => {
-      const res = await axiosPublic.get(`/UserData`);
-      return res.data;
-    },
-  });
-
-  // Initialize AOS on component mount and data load
+const AboutMe = ({ UserData }) => {
   useEffect(() => {
     AOS.init({
       duration: 1500,
       once: false,
     });
     if (UserData) {
-      AOS.refresh(); // Refresh AOS after data load to apply animations properly
+      AOS.refresh(); 
     }
   }, [UserData]);
-
-  // Loading state
-  if (UserDataIsLoading) {
-    return <Loader />;
-  }
-
-  // Error state
-  if (UserDataError) {
-    return <p>Error loading data: {UserDataError.message}</p>;
-  }
 
   const downloadResume = () => {
     const pdfUrl = "../../assets/Sazzadul_Islam_Molla_Resume.pdf";
@@ -57,7 +29,7 @@ const AboutMe = () => {
   return (
     <div className="bg-gradient-to-b from-blue-300 to-white py-40">
       <div
-        className="mx-auto max-w-6xl px-4 text-black "
+        className="mx-auto max-w-6xl px-4 text-black"
         data-aos="fade-up"
         data-aos-delay="200"
         data-aos-once="false"
@@ -73,7 +45,7 @@ const AboutMe = () => {
             </h1>
             {/* Typewriter */}
             <div>
-              <p className="text-5xl text-blue-800 py-3 font-bold">
+              <p className="text-3xl md:text-5xl text-blue-800 py-3 font-bold">
                 <Typewriter
                   words={UserData[0].jobTitles || []}
                   loop={false}
@@ -89,7 +61,7 @@ const AboutMe = () => {
             <div className="text-lg pt-5">
               {UserData[0].description && UserData[0].description.length > 0 ? (
                 UserData[0].description.map((paragraph, index) => (
-                  <p className="py-2 leading-relaxed" key={index}>
+                  <p className="py-2 leading-relaxed text-center md:text-left" key={index}>
                     {paragraph}
                   </p>
                 ))
@@ -157,6 +129,24 @@ const AboutMe = () => {
       </div>
     </div>
   );
+};
+
+// PropTypes validation
+AboutMe.propTypes = {
+  UserData: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      jobTitles: PropTypes.arrayOf(PropTypes.string),
+      description: PropTypes.arrayOf(PropTypes.string),
+      socialLinks: PropTypes.shape({
+        facebook: PropTypes.string,
+        github: PropTypes.string,
+        twitter: PropTypes.string,
+        linkedin: PropTypes.string,
+      }),
+      resumeLink: PropTypes.string,
+    })
+  ).isRequired,
 };
 
 export default AboutMe;

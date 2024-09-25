@@ -5,20 +5,54 @@ import { useForm } from "react-hook-form";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { useEffect } from "react";
-import Loader from "../../Components/Loader";
-import useAxiosPublic from "../../../Hooks/useAxiosPublic";
-import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2"; // Import SweetAlert2
 
-const ContactMe = () => {
-  const axiosPublic = useAxiosPublic();
-
-  // Initialize AOS
+const ContactMe = ({ ContactInfo }) => {
   useEffect(() => {
+    const updateAosAttributes = () => {
+      const elements = document.querySelectorAll("[data-aos]");
+
+      elements.forEach((element) => {
+        if (window.innerWidth <= 768) {
+          // Change the AOS attribute for mobile/tablet view
+          if (element.getAttribute("data-aos") === "fade-right") {
+            element.setAttribute("data-aos", "fade-up");
+          }
+          if (element.getAttribute("data-aos") === "fade-left") {
+            element.setAttribute("data-aos", "fade-up");
+          }
+        } else {
+          // Reset the AOS attribute for larger screens
+          if (element.getAttribute("data-aos") === "fade-up") {
+            if (element.classList.contains("card-left")) {
+              element.setAttribute("data-aos", "fade-right");
+            } else if (element.classList.contains("card-right")) {
+              element.setAttribute("data-aos", "fade-left");
+            }
+          }
+        }
+      });
+
+      // Reinitialize AOS to apply changes
+      AOS.refresh();
+    };
+
+    // Initialize AOS
     AOS.init({
-      duration: 1500, // Animation duration
-      once: true, // Whether animation should happen only once
+      duration: 1500,
+      once: true,
     });
+
+    // Apply AOS attribute changes based on screen size
+    updateAosAttributes();
+
+    // Listen for window resize and update the AOS attributes
+    window.addEventListener("resize", updateAosAttributes);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", updateAosAttributes);
+    };
   }, []);
 
   const {
@@ -28,40 +62,14 @@ const ContactMe = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    // Show SweetAlert2 alert
     Swal.fire({
       icon: "info",
       title: "Functionality Unavailable",
       text: "This function is currently unavailable. Please contact us via email or phone.",
       confirmButtonText: "OK",
     });
-
-    // Handle form submission here if needed
     console.log(data);
   };
-
-  // Fetching User Data
-  const {
-    data: ContactInfo = [], // Default to empty array if data is undefined
-    isLoading: ContactInfoLoading,
-    error: ContactInfoError,
-  } = useQuery({
-    queryKey: ["ContactInfo"],
-    queryFn: async () => {
-      const res = await axiosPublic.get(`/ContactInfo`);
-      return res.data;
-    },
-  });
-
-  // Loading state
-  if (ContactInfoLoading) {
-    return <Loader />;
-  }
-
-  // Error state
-  if (ContactInfoError) {
-    return <p>Error loading data: {ContactInfoError.message}</p>;
-  }
 
   return (
     <div className="bg-gradient-to-b from-blue-400 to-white py-40">
@@ -79,18 +87,17 @@ const ContactMe = () => {
             {ContactInfo.map((info) => (
               <div
                 key={info.id}
-                className="shadow-xl py-7 px-8 rounded-xl flex items-center bg-gradient-to-br from-blue-300 to-blue-50 transition transform hover:translate-y-[-5px] hover:shadow-2xl duration-300 ease-in-out"
+                className={`card-left shadow-xl py-7 px-8 rounded-xl flex items-center bg-gradient-to-br from-blue-300 to-blue-50 transition transform hover:translate-y-[-5px] hover:shadow-2xl duration-300 ease-in-out`}
                 data-aos="fade-right"
                 data-aos-delay="200"
                 data-aos-once="false"
+                data-aos-anchor-placement="top-bottom"
               >
-                {/* Hardcoded icons based on iconType */}
                 <div className="bg-blue-500 p-6 rounded-full text-white text-4xl">
                   {info.iconType === "phone" && <FaPhoneAlt />}
                   {info.iconType === "email" && <IoIosMailOpen />}
                   {info.iconType === "location" && <FaLocationDot />}
                 </div>
-
                 <div className="ml-5">
                   <p className="font-bold text-xl text-blue-500">
                     {info.title}
@@ -111,10 +118,11 @@ const ContactMe = () => {
 
           {/* Contact Me Form */}
           <div
-            className="w-full md:w-1/2 bg-gradient-to-br from-blue-500 to-blue-100 rounded-xl shadow-2xl p-5"
+            className="card-right w-full md:w-1/2 bg-gradient-to-br from-blue-500 to-blue-100 rounded-xl shadow-2xl p-5"
             data-aos="fade-left"
             data-aos-delay="200"
             data-aos-once="false"
+            data-aos-anchor-placement="top-bottom"
           >
             <p className="font-bold text-3xl mb-4 text-white">Get In Touch</p>
             <form onSubmit={handleSubmit(onSubmit)} className="text-black">
