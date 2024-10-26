@@ -134,11 +134,11 @@ const Navbar = () => {
 
   return (
     <div
-      className={`navbar fixed top-0 left-0 w-80 md:w-full z-50 lg:px-[350px] mx-auto transition-colors duration-300 ${
+      className={`navbar fixed top-0 left-0 w-full z-50 lg:px-[350px] mx-auto transition-colors duration-300 ${
         scrollPosition > 50 ? "bg-white shadow-lg" : "bg-blue-200"
       }`}
     >
-      <div className="navbar mx-auto flex justify-between items-center">
+      <div className="navbar mx-auto w-full flex justify-between items-center">
         {/* Navbar Start */}
         <div className="navbar-start flex items-center">
           <div className="dropdown lg:hidden">

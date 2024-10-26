@@ -40,6 +40,7 @@ const MyProjects = ({ MyProject }) => {
               slidesPerView: 1, // Single slide on small mobile
               spaceBetween: 20,
             },
+
             1024: {
               slidesPerView: 3, // 3 slides on larger screens
               spaceBetween: 40,
