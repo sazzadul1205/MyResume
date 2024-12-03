@@ -1,27 +1,24 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/pagination";
-import { Pagination } from "swiper/modules";
-import { FaGithub, FaSearch, FaShare } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
-import PropTypes from "prop-types";
+import { FaEye, FaGithub, FaLink } from "react-icons/fa";
 
 const MyProjects = ({ MyProject }) => {
-  const [selectedProject, setSelectedProject] = useState(null); // To track selected project
+  const [modalContent, setModalContent] = useState(null); // To manage modal content
+  const [isModalOpen, setIsModalOpen] = useState(false); // To manage modal visibility
 
-  // Function to open modal and set selected project
-  const handleViewMore = (project) => {
-    setSelectedProject(project);
+  const openModal = (versions) => {
+    setModalContent(versions); // Set versions to show in the modal
+    setIsModalOpen(true); // Open modal
   };
 
-  // Function to close modal
-  const handleCloseModal = () => {
-    setSelectedProject(null);
+  const closeModal = () => {
+    setIsModalOpen(false); // Close modal
+    setModalContent(null); // Reset modal content
   };
 
   return (
-    <div className="bg-gradient-to-b from-blue-400 to-white py-20 sm:py-40">
+    <div className="py-20 sm:py-40">
       <div className="py-10">
         <p className="text-center text-3xl sm:text-5xl font-bold text-blue-500">
           My Projects
@@ -29,171 +26,93 @@ const MyProjects = ({ MyProject }) => {
         <div className="bg-black p-[2px] w-[150px] sm:w-[300px] mx-auto"></div>
       </div>
 
-      <div className="w-full sm:w-[1200px] mx-auto px-4 sm:px-0">
-        <Swiper
-          slidesPerView={1} // Default to 1 slide for mobile
-          spaceBetween={10}
-          pagination={{ clickable: true }}
-          modules={[Pagination]}
-          breakpoints={{
-            640: {
-              slidesPerView: 1, // Single slide on small mobile
-              spaceBetween: 20,
-            },
-
-            1024: {
-              slidesPerView: 3, // 3 slides on larger screens
-              spaceBetween: 40,
-            },
-          }}
-          className="mySwiper"
-        >
-          {MyProject.map((project, index) => (
-            <SwiperSlide
-              key={index}
-              className="card bg-white text-black w-96 md:w-full shadow-xl pb-10"
-            >
-              <figure>
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="object-cover w-full h-40 sm:h-52"
-                />
-              </figure>
-              <div className="bg-gradient-to-br from-blue-300 to-blue-50">
-                <div className="card-body h-[250px] sm:h-[300px] flex flex-col justify-between">
-                  <h2 className="card-title font-bold text-blue-500">
-                    {project.title}
-                  </h2>
-                  <p className="leading-relaxed text-ellipsis overflow-hidden h-[50px] sm:h-[70px]">
-                    {project.description}
-                  </p>
-                </div>
-                <div className="card-actions flex flex-col md:flex-row justify-center mt-5 pb-5 text-black mx-4 md:text-lg gap-3">
-                  <NavLink to={project.liveLink} target="_blank">
-                    <button className="flex items-center px-5 py-2 md:px-7 md:py-3 border border-blue-500 rounded-3xl  hover:bg-blue-500 hover:text-white">
-                      <FaShare className="mr-2" /> Live Link
-                    </button>
-                  </NavLink>
-                  <button
-                    onClick={() => handleViewMore(project)}
-                    className="flex items-center px-5 py-2 md:px-7 md:py-3 border border-blue-500 rounded-3xl  hover:bg-blue-500 hover:text-white"
-                  >
-                    <FaSearch className="mr-2" /> View More
-                  </button>
-                  <NavLink to={project.githubLink} target="_blank">
-                    <button className="flex items-center px-5 py-2 md:px-7 md:py-3 border border-blue-500 rounded-3xl  hover:bg-blue-500 hover:text-white">
-                      <FaGithub className="mr-2" /> Client
-                    </button>
-                  </NavLink>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
-
-      {/* Modal for displaying project details */}
-      {selectedProject && (
-        <div
-          className="fixed inset-0 flex pt-16 pl-2 md:items-center md:justify-center z-50 text-black"
-          aria-labelledby="project_modal_title"
-          role="dialog"
-          aria-modal="true"
-        >
+      <div className="w-full sm:w-[1200px] mx-auto px-4 sm:px-0 grid grid-cols-1 sm:grid-cols-3 gap-6">
+        {MyProject.map((project, index) => (
           <div
-            className="bg-black bg-opacity-50 w-full h-full absolute top-0 left-0"
-            onClick={handleCloseModal} // Close modal on backdrop click
-            aria-hidden="true"
-          ></div>
-          <div className="bg-white p-4 sm:p-6 rounded-lg relative z-10 max-w-72 md:max-w-4xl mx-2 sm:mx-auto overflow-auto max-h-[80vh]">
-            <h3 id="project_modal_title" className="font-bold text-lg">
-              {selectedProject.title}
-            </h3>
-            <p className="py-4">{selectedProject.description}</p>
-
-            {/* Displaying project content details */}
-            {selectedProject.content &&
-            Array.isArray(selectedProject.content) ? (
-              <div className="overflow-y-auto max-h-60 sm:max-h-96">
-                {selectedProject.content.map((section, index) => (
-                  <div key={index}>
-                    <h4 className="font-bold text-md mt-4">{section.title}</h4>
-                    <ul className="list-disc ml-5">
-                      {section.features?.map((feature, i) => (
-                        <li key={i} className="py-1">
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-
-                    {/* Handling nested sections like in the dashboard */}
-                    {section.sections && (
-                      <div>
-                        {section.sections.map((subSection, subIndex) => (
-                          <div key={subIndex}>
-                            <h5 className="font-bold text-md mt-4">
-                              {subSection.title}
-                            </h5>
-                            <ul className="list-disc ml-5">
-                              {subSection.features?.map(
-                                (feature, subFeatureIndex) => (
-                                  <li key={subFeatureIndex} className="py-1">
-                                    {feature}
-                                  </li>
-                                )
-                              )}
-                            </ul>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
+            key={index}
+            className="relative bg-white text-black shadow-xl rounded-lg overflow-hidden"
+          >
+            <img
+              src={project.image}
+              alt={project.title}
+              className="object-cover w-full h-40 sm:h-52"
+            />
+            <div className="p-4 bg-black">
+              <p className="text-gray-400 text-sm">ReactJS Project</p>
+              <div className="flex justify-between items-center">
+                <h3 className="font-bold text-xl text-white">
+                  {project.title}
+                </h3>
+                {project.versions && project.versions.length > 0 && (
+                  <button
+                    onClick={() => openModal(project.versions)}
+                    className="text-white bg-black p-2 rounded-full"
+                  >
+                    View Versions
+                  </button>
+                )}
               </div>
-            ) : (
-              <p>No additional content available for this project.</p>
-            )}
-
-            {/* Modal action buttons */}
-            <div className="mt-4">
-              <button
-                className="btn bg-blue-500 hover:bg-blue-400 border-none text-white w-full sm:w-40"
-                onClick={handleCloseModal}
-              >
-                Close
+            </div>
+            <div className="absolute top-2 right-2 space-x-2">
+              <NavLink to={project.liveLink} target="_blank">
+                <button className="bg-blue-500 text-white rounded-full p-3 hover:bg-blue-600">
+                  <FaLink />
+                </button>
+              </NavLink>
+              <NavLink to={project.githubLink} target="_blank">
+                <button className="bg-blue-500 text-white rounded-full p-3 hover:bg-blue-600">
+                  <FaGithub />
+                </button>
+              </NavLink>
+              <button className="bg-blue-500 text-white rounded-full p-3 hover:bg-blue-600">
+                <FaEye />
               </button>
             </div>
           </div>
-        </div>
+        ))}
+      </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <VersionModal versions={modalContent} closeModal={closeModal} />
       )}
     </div>
   );
 };
 
-// PropTypes validation
-MyProjects.propTypes = {
-  MyProject: PropTypes.arrayOf(
-    PropTypes.shape({
-      image: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      liveLink: PropTypes.string.isRequired,
-      githubLink: PropTypes.string.isRequired,
-      content: PropTypes.arrayOf(
-        PropTypes.shape({
-          title: PropTypes.string,
-          features: PropTypes.arrayOf(PropTypes.string),
-          sections: PropTypes.arrayOf(
-            PropTypes.shape({
-              title: PropTypes.string,
-              features: PropTypes.arrayOf(PropTypes.string),
-            })
-          ),
-        })
-      ),
-    })
-  ).isRequired,
+const VersionModal = ({ versions, closeModal }) => {
+  return (
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center z-50">
+      <div className="bg-white p-6 rounded-lg w-11/12 sm:w-96">
+        <h2 className="text-2xl font-bold mb-4">Previous Versions</h2>
+        <div className="space-y-4">
+          {versions.map((version, index) => (
+            <div key={index} className="py-2">
+              <p className="font-bold">{version.title}</p>
+              <div className="flex space-x-2">
+                <NavLink to={version.liveLink} target="_blank">
+                  <button className="text-blue-500 hover:underline">
+                    Live Link
+                  </button>
+                </NavLink>
+                <NavLink to={version.githubLink} target="_blank">
+                  <button className="text-blue-500 hover:underline">
+                    GitHub
+                  </button>
+                </NavLink>
+              </div>
+            </div>
+          ))}
+        </div>
+        <button
+          onClick={closeModal}
+          className="mt-4 bg-red-500 text-white rounded-full p-2 w-full hover:bg-red-600"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  );
 };
 
 export default MyProjects;

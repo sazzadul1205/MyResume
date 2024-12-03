@@ -1,25 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../../Hooks/useAxiosPublic";
 import AboutMe from "./AboutMe/AboutMe";
-import Banners from "./Banners/Banners";
 import ContactMe from "./ContactMe/ContactMe";
 import MyProjects from "./MyProjects/MyProjects";
 import MySelf from "./MySelf/MySelf";
-import MySkills from "./MySkills/MySkills";
 import Loader from "../Components/Loader";
+import background from "../../assets/Background.jfif";
+import Skills from "./Skills/Skills";
 
 const Home = () => {
   const axiosPublic = useAxiosPublic();
-
-  // Fetching Banner
-  const {
-    data: BannerData,
-    isLoading: BannerIsLoading,
-    error: BannerError,
-  } = useQuery({
-    queryKey: ["Banner"],
-    queryFn: () => axiosPublic.get(`/Banner`).then((res) => res.data),
-  });
 
   // Fetching User Data
   const {
@@ -43,17 +33,17 @@ const Home = () => {
 
   // Fetching MyProject Data
   const {
-    data: MyProject = [], // Default to empty array if data is undefined
-    isLoading: MyProjectLoading,
-    error: MyProjectError,
+    data: Projects = [],
+    isLoading: ProjectsLoading,
+    error: ProjectsError,
   } = useQuery({
-    queryKey: ["MyProject"],
-    queryFn: () => axiosPublic.get(`/MyProject`).then((res) => res.data),
+    queryKey: ["Projects"],
+    queryFn: () => axiosPublic.get(`/Projects`).then((res) => res.data),
   });
 
   // Fetching ContactInfo Data
   const {
-    data: ContactInfo = [], // Default to empty array if data is undefined
+    data: ContactInfo = [],
     isLoading: ContactInfoLoading,
     error: ContactInfoError,
   } = useQuery({
@@ -63,23 +53,16 @@ const Home = () => {
 
   // Loading state
   if (
-    BannerIsLoading ||
     UserDataIsLoading ||
     MySelfIsLoading ||
-    MyProjectLoading ||
+    ProjectsLoading ||
     ContactInfoLoading
   ) {
     return <Loader />;
   }
 
   // Error state
-  if (
-    BannerError ||
-    UserDataError ||
-    MySelfError ||
-    MyProjectError ||
-    ContactInfoError
-  ) {
+  if (UserDataError || MySelfError || ProjectsError || ContactInfoError) {
     return (
       <div className="h-screen flex flex-col justify-center items-center bg-gradient-to-br from-blue-300 to-white">
         <p className="text-center text-red-500 font-bold text-3xl mb-8">
@@ -87,7 +70,7 @@ const Home = () => {
         </p>
         <button
           className="px-6 py-3 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-400 transition duration-300"
-          onClick={() => window.location.reload()} // Inline reload function
+          onClick={() => window.location.reload()}
         >
           Reload
         </button>
@@ -96,10 +79,18 @@ const Home = () => {
   }
 
   return (
-    <div>
-      <section id="banners">
+    <div
+      style={{
+        backgroundImage: `url(${background})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+      }}
+      className="min-h-screen"
+    >
+      {/* <section id="banners">
         <Banners BannerData={BannerData} />
-      </section>
+      </section> */}
       <section id="about">
         <AboutMe UserData={UserData} />
       </section>
@@ -107,10 +98,10 @@ const Home = () => {
         <MySelf MySelfData={MySelfData} />
       </section>
       <section id="projects">
-        <MyProjects MyProject={MyProject} />
+        <MyProjects MyProject={Projects} />
       </section>
       <section id="skills">
-        <MySkills />
+        <Skills />
       </section>
       <section id="contact">
         <ContactMe ContactInfo={ContactInfo} />

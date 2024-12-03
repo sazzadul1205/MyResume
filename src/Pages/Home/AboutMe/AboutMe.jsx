@@ -27,9 +27,9 @@ const AboutMe = ({ UserData }) => {
   };
 
   return (
-    <div className="bg-gradient-to-b from-blue-300 to-white py-40">
+    <div className=" py-40 ">
       <div
-        className="mx-auto max-w-6xl px-4 text-black"
+        className="mx-auto max-w-6xl px-4 text-white"
         data-aos="fade-up"
         data-aos-delay="200"
         data-aos-once="false"
@@ -37,15 +37,15 @@ const AboutMe = ({ UserData }) => {
         {/* Top Section */}
         {UserData && UserData.length > 0 && (
           <>
-            <h1 className="text-2xl border-l-4 pl-2 border-[#1206f1]">
+            <h1 className="text-2xl border-l-4 pl-2 border-[#6e6ab4]">
               Hi! I am{" "}
-              <span className="text-blue-800 font-bold text-4xl ml-5">
+              <span className="text-blue-300 font-bold text-4xl ml-5">
                 {UserData[0].name}
               </span>
             </h1>
             {/* Typewriter */}
             <div>
-              <p className="text-3xl md:text-5xl text-blue-800 py-3 font-bold">
+              <p className="text-3xl md:text-5xl text-blue-300 py-3 font-bold">
                 <Typewriter
                   words={UserData[0].jobTitles || []}
                   loop={false}
@@ -78,7 +78,7 @@ const AboutMe = ({ UserData }) => {
                     href={UserData[0].socialLinks.facebook}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn text-xl btn-circle btn-outline"
+                    className="btn text-xl btn-circle btn-outline bg-gray-200 hover:bg-gray-600"
                   >
                     <FaFacebook className="text-[#4267B2]" />
                   </a>
@@ -88,7 +88,7 @@ const AboutMe = ({ UserData }) => {
                     href={UserData[0].socialLinks.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn text-xl btn-circle btn-outline"
+                    className="btn text-xl btn-circle btn-outline bg-gray-200 hover:bg-gray-600"
                   >
                     <FaGithub className="text-[#171515]" />
                   </a>
@@ -98,7 +98,7 @@ const AboutMe = ({ UserData }) => {
                     href={UserData[0].socialLinks.twitter}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn text-xl btn-circle btn-outline"
+                    className="btn text-xl btn-circle btn-outline bg-gray-200 hover:bg-gray-600"
                   >
                     <FaTwitter className="text-blue-400" />
                   </a>
@@ -108,7 +108,7 @@ const AboutMe = ({ UserData }) => {
                     href={UserData[0].socialLinks.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn text-xl btn-circle btn-outline"
+                    className="btn text-xl btn-circle btn-outline bg-gray-200 hover:bg-gray-600"
                   >
                     <FaLinkedin className="text-[#0077b5]" />
                   </a>

@@ -29,7 +29,7 @@ const Banners = ({ BannerData }) => {
   };
 
   return (
-    <div className="bg-blue-300 py-20">
+    <div className=" py-20">
       <div className="relative mx-auto h-[600px] md:h-[900px]">
         {/* Dynamic Image */}
         <img

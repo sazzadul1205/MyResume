@@ -16,14 +16,14 @@ const MySelf = ({ MySelfData }) => {
   const MySelf = MySelfData[0];
 
   return (
-    <div className="bg-gradient-to-b from-white to-blue-400 lg:py-40">
+    <div className="lg:py-40">
       <div
-        className="mx-auto lg:w-[1200px]  "
+        className="mx-auto   text-white"
         data-aos="fade-left"
         data-aos-delay="300"
         data-aos-once="false"
       >
-        <div className="px-1 md:px-10 py-14 bg-gradient-to-br from-blue-400 to-blue-300 rounded-2xl shadow-2xl flex flex-col lg:flex-row gap-10 items-center ">
+        <div className="px-1 md:px-10 py-14 bg-gradient-to-br from-blue-400 to-blue-300 rounded-2xl shadow-2xl flex flex-col lg:flex-row gap-10 items-center opacity-80 max-w-[1200px] mx-auto">
           {/* Rendering the image from the local JSON data */}
           <img
             src={MySelf.imageUrl}
